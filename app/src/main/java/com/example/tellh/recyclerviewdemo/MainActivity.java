@@ -92,20 +92,24 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i <= 100; i++) {
             mDataList.add(String.valueOf(i));
         }
+        //设置item动画
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new RecycAdapter(MainActivity.this, mDataList);
+        mAdapter = new RecycAdapter<String>(MainActivity.this, mDataList);
         recyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new RecycAdapter.ItemClickListener() {
+        //添加item点击事件监听
+        mAdapter.setOnItemClickListener(new RecycAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int pos) {
-                Toast.makeText(MainActivity.this, "click "+pos, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "click " + pos, Toast.LENGTH_SHORT).show();
             }
-
+        });
+        mAdapter.setOnItemLongClickListener(new RecycAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, int pos) {
                 Toast.makeText(MainActivity.this, "long click "+pos, Toast.LENGTH_SHORT).show();
             }
         });
+        //设置布局样式LayoutManager
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false));
 //        recyclerView.addItemDecoration(new ItemDividerDecoration(MainActivity.this, OrientationHelper.VERTICAL));
 

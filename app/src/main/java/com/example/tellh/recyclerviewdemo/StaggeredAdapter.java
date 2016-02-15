@@ -23,7 +23,7 @@ public class StaggeredAdapter extends RecycAdapter {
         ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
         layoutParams.height= heighs[position];
         holder.itemView.setLayoutParams(layoutParams);
-        holder.tv.setText(mData.get(position));
+        holder.tv.setText((String)mData.get(position));
     }
 
 }

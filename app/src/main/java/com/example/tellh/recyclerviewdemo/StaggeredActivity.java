@@ -81,7 +81,7 @@ public class StaggeredActivity extends AppCompatActivity {
         for (int i = 0; i <= 100; i++) {
             mDataList.add(String.valueOf(i));
         }
-        recyclerView.setAdapter(new StaggeredAdapter(StaggeredActivity.this, mDataList));
+        recyclerView.setAdapter(new StaggeredAdapter(this, mDataList));
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL));
 //        recyclerView.addItemDecoration(new ItemDividerDecoration(MainActivity.this, OrientationHelper.VERTICAL));
         recyclerView.addItemDecoration(new DividerGridItemDecoration(this));

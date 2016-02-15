@@ -22,10 +22,27 @@ public class ItemDividerDecoration extends RecyclerView.ItemDecoration {
         this.orientation = orientation;
     }
 
+    /**
+     * 饰的绘制在Item条目绘制之前调用，所以这有可能被Item的内容所遮挡
+     * @param c
+     * @param parent
+     * @param state
+     */
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         drawHDeraction(c, parent);
         drawVDeraction(c, parent);
+    }
+
+    /**
+     * 装饰的绘制在Item条目绘制之后调用，因此装饰将浮于Item之上
+     * @param c
+     * @param parent
+     * @param state
+     */
+    @Override
+    public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+        super.onDrawOver(c, parent, state);
     }
 
     /**
@@ -70,6 +87,7 @@ public class ItemDividerDecoration extends RecyclerView.ItemDecoration {
 
     /**
      * 给divider预留空间
+     * 与padding或margin类似，LayoutManager在测量阶段会调用该方法，计算出每一个Item的正确尺寸并设置偏移量。
      * @param outRect
      * @param view
      * @param parent
