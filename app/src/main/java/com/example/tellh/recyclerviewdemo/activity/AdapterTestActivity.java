@@ -1,9 +1,11 @@
-package com.example.tellh.recyclerviewdemo;
+package com.example.tellh.recyclerviewdemo.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,14 +14,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import com.example.tellh.recyclerviewdemo.BaseRecyclerAdapter;
+import com.example.tellh.recyclerviewdemo.DividerGridItemDecoration;
+import com.example.tellh.recyclerviewdemo.R;
+import com.example.tellh.recyclerviewdemo.RecyclerViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StaggeredActivity extends AppCompatActivity {
+public class AdapterTestActivity extends AppCompatActivity {
 
     List<String> mDataList;
     private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +36,7 @@ public class StaggeredActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +76,13 @@ public class StaggeredActivity extends AppCompatActivity {
                 recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.HORIZONTAL));
                 break;
             case R.id.id_action_staggeredgridview:
+                startActivity(new Intent(this,StaggeredActivity.class));
+                break;
+            case R.id.id_action_add:
+                ((BaseRecyclerAdapter)mAdapter).add(2, "new item");
+                break;
+            case R.id.id_action_delete:
+                ((BaseRecyclerAdapter)mAdapter).delete(2);
                 break;
             default:
                 break;
@@ -81,10 +97,35 @@ public class StaggeredActivity extends AppCompatActivity {
         for (int i = 0; i <= 100; i++) {
             mDataList.add(String.valueOf(i));
         }
-        recyclerView.setAdapter(new StaggeredAdapter(this, mDataList));
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL));
-//        recyclerView.addItemDecoration(new ItemDividerDecoration(MainActivity.this, OrientationHelper.VERTICAL));
-        recyclerView.addItemDecoration(new DividerGridItemDecoration(this));
+        //设置item动画
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        mAdapter = new BaseRecyclerAdapter<String>(this,mDataList) {
+            @Override
+            public int getItemLayoutId(int viewType) {
+                return R.layout.item_cardview;
+            }
+            @Override
+            public void bindData(RecyclerViewHolder holder, int position,String item) {
+                //调用holder.getView(),getXXX()方法根据id得到控件实例，进行数据绑定即可
+                holder.setText(R.id.tv_num,item);
+            }
+        };
+        recyclerView.setAdapter(mAdapter);
+        //添加item点击事件监听
+        ((BaseRecyclerAdapter)mAdapter).setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int pos) {
+                Toast.makeText(AdapterTestActivity.this, "click " + pos, Toast.LENGTH_SHORT).show();
+            }
+        });
+        ((BaseRecyclerAdapter)mAdapter).setOnItemLongClickListener(new BaseRecyclerAdapter.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(View itemView, int pos) {
+                Toast.makeText(AdapterTestActivity.this, "long click " + pos, Toast.LENGTH_SHORT).show();
+            }
+        });
+        //设置布局样式LayoutManager
+        recyclerView.setLayoutManager(new LinearLayoutManager(AdapterTestActivity.this, LinearLayoutManager.VERTICAL, false));
 
     }
 }

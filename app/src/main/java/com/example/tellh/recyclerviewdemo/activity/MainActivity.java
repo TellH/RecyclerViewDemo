@@ -1,4 +1,4 @@
-package com.example.tellh.recyclerviewdemo;
+package com.example.tellh.recyclerviewdemo.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.example.tellh.recyclerviewdemo.DividerGridItemDecoration;
+import com.example.tellh.recyclerviewdemo.R;
+import com.example.tellh.recyclerviewdemo.RecycAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this,StaggeredActivity.class));
                 break;
             case R.id.id_action_add:
-                mAdapter.add(2,"new item");
+                mAdapter.add(2, "new item");
                 break;
             case R.id.id_action_delete:
                 mAdapter.delete(2);
@@ -106,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.setOnItemLongClickListener(new RecycAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, int pos) {
-                Toast.makeText(MainActivity.this, "long click "+pos, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "long click " + pos, Toast.LENGTH_SHORT).show();
             }
         });
         //设置布局样式LayoutManager
