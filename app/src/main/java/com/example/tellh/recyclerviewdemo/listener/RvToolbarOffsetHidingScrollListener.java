@@ -1,15 +1,15 @@
 package com.example.tellh.recyclerviewdemo.listener;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
 import com.example.tellh.recyclerviewdemo.Utils;
 
-public class RvOffsetHidingScrollListener extends RecyclerView.OnScrollListener {
+public class RvToolbarOffsetHidingScrollListener extends RecyclerView.OnScrollListener {
 
     private final Toolbar mToolbar;
     private int mToolbarOffset = 0;
@@ -19,7 +19,7 @@ public class RvOffsetHidingScrollListener extends RecyclerView.OnScrollListener 
     private static final float SHOW_THRESHOLD = 70;
     private int mScrollDistance;
 
-    public RvOffsetHidingScrollListener(Context context, Toolbar toolbar) {
+    public RvToolbarOffsetHidingScrollListener(Context context, @NonNull Toolbar toolbar) {
         mToolbarHeight = Utils.getToolbarHeight(context);
         mToolbar = toolbar;
     }
@@ -34,22 +34,20 @@ public class RvOffsetHidingScrollListener extends RecyclerView.OnScrollListener 
         if ((mToolbarOffset < mToolbarHeight && dy > 0) || (mToolbarOffset > 0 && dy < 0)) {
             mToolbarOffset += dy;
         }
-        mScrollDistance+=dy;
+        mScrollDistance += dy;
     }
 
     private boolean isReachTop(RecyclerView recyclerView) {
         //因为存在header所以是1
         int firstItemtop = recyclerView.getChildAt(1).getTop();
         int parentTop = recyclerView.getTop();
-        return !(firstItemtop < parentTop);
+        return !(firstItemtop > parentTop);
     }
 
     private boolean isReachBottom(RecyclerView recyclerView) {
         int lastItemBottom = recyclerView.getChildAt(recyclerView.getChildCount() - 1).getBottom();
         int parentBottom = recyclerView.getBottom();
-        if (lastItemBottom > parentBottom)
-            return false;
-        else return true;
+        return lastItemBottom <= parentBottom;
     }
 
     private void clipToolbarOffset() {
@@ -69,12 +67,10 @@ public class RvOffsetHidingScrollListener extends RecyclerView.OnScrollListener 
     }
 
     private void onShow() {
-        if (mToolbar != null) {
-            mToolbar.animate()
-                    .translationY(0)
-                    .setInterpolator(new DecelerateInterpolator(2))
-                    .start();
-        }
+        mToolbar.animate()
+                .translationY(0)
+                .setInterpolator(new DecelerateInterpolator(2))
+                .start();
     }
 
     @Override
@@ -82,7 +78,9 @@ public class RvOffsetHidingScrollListener extends RecyclerView.OnScrollListener 
         super.onScrollStateChanged(recyclerView, newState);
 
         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-            if (mScrollDistance>mToolbarHeight) {
+            //防止因toolbar隐藏而在顶部漏出一大片空白
+            if (mScrollDistance > mToolbarHeight) {
+                //根据mToolbarOffset判断是前进或回滚
                 if (mControlsVisible) {
                     if (mToolbarOffset > HIDE_THRESHOLD) {
                         setInvisible();
@@ -95,11 +93,10 @@ public class RvOffsetHidingScrollListener extends RecyclerView.OnScrollListener 
                     } else {
                         if (isReachTop(recyclerView) || isReachBottom(recyclerView)) {
                             setVisible();
-                            Log.d("t", "reach");
                         } else setInvisible();
                     }
                 }
-            }else {
+            } else {
                 setVisible();
             }
         }
@@ -114,12 +111,10 @@ public class RvOffsetHidingScrollListener extends RecyclerView.OnScrollListener 
     }
 
     private void onHide() {
-        if (mToolbar != null) {
-            mToolbar.animate()
-                    .translationY(-mToolbar.getHeight())
-                    .setInterpolator(new AccelerateInterpolator(2))
-                    .start();
-        }
+        mToolbar.animate()
+                .translationY(-mToolbar.getHeight())
+                .setInterpolator(new AccelerateInterpolator(2))
+                .start();
     }
 
     public void onMoved(int distance) {

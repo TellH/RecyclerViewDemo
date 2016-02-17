@@ -19,7 +19,8 @@ import android.widget.Toast;
 import com.example.tellh.recyclerviewdemo.R;
 import com.example.tellh.recyclerviewdemo.adapter.BaseRecyclerAdapter;
 import com.example.tellh.recyclerviewdemo.adapter.RecyclerViewHolder;
-import com.example.tellh.recyclerviewdemo.listener.RvOffsetHidingScrollListener;
+import com.example.tellh.recyclerviewdemo.listener.RvFabOffsetHidingScrollListener;
+import com.example.tellh.recyclerviewdemo.listener.RvToolbarOffsetHidingScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,8 +146,8 @@ public class ToolbarAnimatedActivity extends AppCompatActivity {
 //            }
 //        });
 
-        recyclerView.addOnScrollListener(new RvOffsetHidingScrollListener(this,mToolbar));
+        recyclerView.addOnScrollListener(new RvToolbarOffsetHidingScrollListener(this,mToolbar));
+        recyclerView.addOnScrollListener(new RvFabOffsetHidingScrollListener(this,fab));
     }
-
 
 }
