@@ -16,10 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.tellh.recyclerviewdemo.BaseRecyclerAdapter;
 import com.example.tellh.recyclerviewdemo.DividerGridItemDecoration;
 import com.example.tellh.recyclerviewdemo.R;
-import com.example.tellh.recyclerviewdemo.RecyclerViewHolder;
+import com.example.tellh.recyclerviewdemo.adapter.BaseRecyclerAdapter;
+import com.example.tellh.recyclerviewdemo.adapter.RecyclerViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,14 +101,20 @@ public class AdapterTestActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new BaseRecyclerAdapter<String>(this,mDataList) {
             @Override
-            public int getItemLayoutId(int viewType) {
+            protected int getItemLayoutId(int viewType) {
                 return R.layout.item_cardview;
             }
             @Override
-            public void bindData(RecyclerViewHolder holder, int position,String item) {
+            protected void bindData(RecyclerViewHolder holder, int position,String item) {
                 //调用holder.getView(),getXXX()方法根据id得到控件实例，进行数据绑定即可
                 holder.setText(R.id.tv_num,item);
             }
+//            //设置Header
+//            @Override
+//            protected int getHeaderLayoutId() {
+//                Log.d("TAG", "getHeaderLayoutId() returned: " + R.layout.header);
+//                return R.layout.header;
+//            }
         };
         recyclerView.setAdapter(mAdapter);
         //添加item点击事件监听

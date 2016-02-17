@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.example.tellh.recyclerviewdemo.DividerGridItemDecoration;
 import com.example.tellh.recyclerviewdemo.R;
-import com.example.tellh.recyclerviewdemo.RecycAdapter;
+import com.example.tellh.recyclerviewdemo.adapter.RecycAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

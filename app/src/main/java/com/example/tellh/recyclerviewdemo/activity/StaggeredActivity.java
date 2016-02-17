@@ -15,7 +15,7 @@ import android.view.View;
 
 import com.example.tellh.recyclerviewdemo.DividerGridItemDecoration;
 import com.example.tellh.recyclerviewdemo.R;
-import com.example.tellh.recyclerviewdemo.StaggeredAdapter;
+import com.example.tellh.recyclerviewdemo.adapter.StaggeredAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
