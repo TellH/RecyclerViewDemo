@@ -1,17 +1,27 @@
 package com.example.tellh.recyclerviewdemo.listener;
 
+import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 
 public abstract class RvHidingScrollListener extends RecyclerView.OnScrollListener {
     private static final int HIDE_THRESHOLD = 120;
     private int scrolledDistance = 0;
     private boolean controlsVisible = true;
+    private Toolbar mToolbar;
+    private FloatingActionButton mFab;
+    private Context mContext;
+
+    public RvHidingScrollListener(Context context, Toolbar mToolbar, FloatingActionButton mFab) {
+        this.mToolbar = mToolbar;
+        this.mFab = mFab;
+        mContext = context;
+    }
 
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -41,34 +51,42 @@ public abstract class RvHidingScrollListener extends RecyclerView.OnScrollListen
         }
     }
 
-    protected void hideView(Toolbar toolbar) {
-        toolbar.animate()
-                .translationY(-toolbar.getHeight())
-                .setInterpolator(new AccelerateInterpolator(2))
-                .start();
+    protected void hideToolbar() {
+        if (mToolbar != null) {
+            mToolbar.animate()
+                    .translationY(-mToolbar.getHeight())
+                    .setInterpolator(new AccelerateInterpolator(2))
+                    .start();
+        }
     }
 
-    protected void hideView(ImageButton button) {
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) button.getLayoutParams();
-        int fabBottomMargin = lp.bottomMargin;
-        button.animate()
-                .translationY(button.getHeight() + fabBottomMargin)
-                .setInterpolator(new AccelerateInterpolator(2))
-                .start();
+    protected void hideFab() {
+        if (mFab != null) {
+            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mFab.getLayoutParams();
+            int fabBottomMargin = lp.bottomMargin;
+            mFab.animate()
+                    .translationY(mFab.getHeight() + fabBottomMargin)
+                    .setInterpolator(new AccelerateInterpolator(2))
+                    .start();
+        }
     }
 
-    protected void showView(Toolbar toolbar) {
-        toolbar.animate()
-                .translationY(0)
-                .setInterpolator(new DecelerateInterpolator(2))
-                .start();
+    protected void showToolbar() {
+        if (mToolbar != null) {
+            mToolbar.animate()
+                    .translationY(0)
+                    .setInterpolator(new DecelerateInterpolator(2))
+                    .start();
+        }
     }
 
-    protected void showView(ImageButton button) {
-        button.animate()
-                .translationY(0)
-                .setInterpolator(new DecelerateInterpolator(2))
-                .start();
+    protected void showFab() {
+        if (mFab != null) {
+            mFab.animate()
+                    .translationY(0)
+                    .setInterpolator(new DecelerateInterpolator(2))
+                    .start();
+        }
     }
 
 

@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.example.tellh.recyclerviewdemo.R;
 import com.example.tellh.recyclerviewdemo.adapter.BaseRecyclerAdapter;
 import com.example.tellh.recyclerviewdemo.adapter.RecyclerViewHolder;
-import com.example.tellh.recyclerviewdemo.listener.RvHidingScrollListener;
+import com.example.tellh.recyclerviewdemo.listener.RvOffsetHidingScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,6 @@ public class ToolbarAnimatedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_toolbar);
         init();
-        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,6 +89,7 @@ public class ToolbarAnimatedActivity extends AppCompatActivity {
 
     private void init() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         setSupportActionBar(mToolbar);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mDataList = new ArrayList<>();
@@ -131,20 +131,21 @@ public class ToolbarAnimatedActivity extends AppCompatActivity {
         //设置布局样式LayoutManager
         recyclerView.setLayoutManager(new LinearLayoutManager(ToolbarAnimatedActivity.this, LinearLayoutManager.VERTICAL, false));
 
-        recyclerView.addOnScrollListener(new RvHidingScrollListener() {
-            @Override
-            public void onHide() {
-                hideView(mToolbar);
-                hideView(fab);
-            }
+//        recyclerView.addOnScrollListener(new RvHidingScrollListener(this, mToolbar, fab) {
+//            @Override
+//            public void onHide() {
+//                hideFab();
+//                hideToolbar();
+//            }
+//
+//            @Override
+//            public void onShow() {
+//                showFab();
+//                showToolbar();
+//            }
+//        });
 
-            @Override
-            public void onShow() {
-                showView(mToolbar);
-                showView(fab);
-            }
-
-        });
+        recyclerView.addOnScrollListener(new RvOffsetHidingScrollListener(this,mToolbar));
     }
 
 
