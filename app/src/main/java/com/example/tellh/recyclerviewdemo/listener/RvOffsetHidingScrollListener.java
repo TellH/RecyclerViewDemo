@@ -17,6 +17,7 @@ public class RvOffsetHidingScrollListener extends RecyclerView.OnScrollListener 
     private boolean mControlsVisible = true;
     private static final float HIDE_THRESHOLD = 10;
     private static final float SHOW_THRESHOLD = 70;
+    private int mScrollDistance;
 
     public RvOffsetHidingScrollListener(Context context, Toolbar toolbar) {
         mToolbarHeight = Utils.getToolbarHeight(context);
@@ -33,6 +34,7 @@ public class RvOffsetHidingScrollListener extends RecyclerView.OnScrollListener 
         if ((mToolbarOffset < mToolbarHeight && dy > 0) || (mToolbarOffset > 0 && dy < 0)) {
             mToolbarOffset += dy;
         }
+        mScrollDistance+=dy;
     }
 
     private boolean isReachTop(RecyclerView recyclerView) {
@@ -80,21 +82,25 @@ public class RvOffsetHidingScrollListener extends RecyclerView.OnScrollListener 
         super.onScrollStateChanged(recyclerView, newState);
 
         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-            if (mControlsVisible) {
-                if (mToolbarOffset > HIDE_THRESHOLD) {
-                    setInvisible();
-                } else {
-                    setVisible();
-                }
-            } else {
-                if ((mToolbarHeight - mToolbarOffset) > SHOW_THRESHOLD) {
-                    setVisible();
-                } else {
-                    if (isReachTop(recyclerView) || isReachBottom(recyclerView)) {
+            if (mScrollDistance>mToolbarHeight) {
+                if (mControlsVisible) {
+                    if (mToolbarOffset > HIDE_THRESHOLD) {
+                        setInvisible();
+                    } else {
                         setVisible();
-                        Log.d("t", "reach");
-                    } else setInvisible();
+                    }
+                } else {
+                    if ((mToolbarHeight - mToolbarOffset) > SHOW_THRESHOLD) {
+                        setVisible();
+                    } else {
+                        if (isReachTop(recyclerView) || isReachBottom(recyclerView)) {
+                            setVisible();
+                            Log.d("t", "reach");
+                        } else setInvisible();
+                    }
                 }
+            }else {
+                setVisible();
             }
         }
     }
