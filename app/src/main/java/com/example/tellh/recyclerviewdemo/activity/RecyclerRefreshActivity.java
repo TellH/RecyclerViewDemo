@@ -67,7 +67,9 @@ public class RecyclerRefreshActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.id_action_gridview:
-                recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+                recyclerView.setLayoutManager(gridLayoutManager);
+                mAdapter.getGridLayoutManager(gridLayoutManager);
                 break;
             case R.id.id_action_listview:
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -109,12 +110,12 @@ public class AdapterTestActivity extends AppCompatActivity {
                 //调用holder.getView(),getXXX()方法根据id得到控件实例，进行数据绑定即可
                 holder.setText(R.id.tv_num,item);
             }
-//            //设置Header
-//            @Override
-//            protected int getHeaderLayoutId() {
-//                Log.d("TAG", "getHeaderLayoutId() returned: " + R.layout.header);
-//                return R.layout.header;
-//            }
+            //设置Header
+            @Override
+            protected int getHeaderLayoutId() {
+                Log.d("TAG", "getHeaderLayoutId() returned: " + R.layout.header);
+                return R.layout.header;
+            }
         };
         recyclerView.setAdapter(mAdapter);
         //添加item点击事件监听
@@ -131,7 +132,10 @@ public class AdapterTestActivity extends AppCompatActivity {
             }
         });
         //设置布局样式LayoutManager
-        recyclerView.setLayoutManager(new LinearLayoutManager(AdapterTestActivity.this, LinearLayoutManager.VERTICAL, false));
+//        recyclerView.setLayoutManager(new LinearLayoutManager(AdapterTestActivity.this, LinearLayoutManager.VERTICAL, false));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+        recyclerView.setLayoutManager(gridLayoutManager);
+        ((BaseRecyclerAdapter) mAdapter).getGridLayoutManager(gridLayoutManager);
 
     }
 }

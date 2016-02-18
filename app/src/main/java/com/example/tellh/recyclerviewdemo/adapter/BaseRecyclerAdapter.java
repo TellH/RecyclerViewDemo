@@ -1,6 +1,8 @@
 package com.example.tellh.recyclerviewdemo.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +30,20 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
         mInflater = LayoutInflater.from(ctx);
     }
 
+
+    /**
+     * 如果你要用在GridLayout中使用header或footer，记得调用该函数
+     * @param manager
+     */
+    public void getGridLayoutManager(@NonNull final GridLayoutManager manager) {
+        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return (position == getFooterPosition() || position == getHeaderPosition()) ?
+                        manager.getSpanCount() : 1;
+            }
+        });
+    }
 
     /**
      * 如果需要在子类重写该方法，建议参照此形式
@@ -185,11 +201,11 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
     abstract protected void bindData(RecyclerViewHolder holder, int position, T item);
 
     public interface OnItemClickListener {
-        public void onItemClick(View itemView, int pos);
+        void onItemClick(View itemView, int pos);
     }
 
     public interface OnItemLongClickListener {
-        public void onItemLongClick(View itemView, int pos);
+        void onItemLongClick(View itemView, int pos);
     }
 
 }
