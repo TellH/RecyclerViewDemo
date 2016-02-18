@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -82,9 +81,6 @@ public class RvFabOffsetHidingScrollListener extends RecyclerView.OnScrollListen
     @Override
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
         super.onScrollStateChanged(recyclerView, newState);
-
-        if (isReachTop(recyclerView, newState))
-            Log.d("tlh", "reach top");
 
         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
             if (mControlsVisible) {
