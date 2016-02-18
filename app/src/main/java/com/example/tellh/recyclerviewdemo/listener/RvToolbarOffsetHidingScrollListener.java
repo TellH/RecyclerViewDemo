@@ -2,6 +2,7 @@ package com.example.tellh.recyclerviewdemo.listener;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.animation.AccelerateInterpolator;
@@ -37,17 +38,20 @@ public class RvToolbarOffsetHidingScrollListener extends RecyclerView.OnScrollLi
         mScrollDistance += dy;
     }
 
-    private boolean isReachTop(RecyclerView recyclerView) {
-        //因为存在header所以是1
-        int firstItemtop = recyclerView.getChildAt(1).getTop();
-        int parentTop = recyclerView.getTop();
-        return !(firstItemtop > parentTop);
+    private boolean isReachTop(RecyclerView recyclerView, int newState) {
+        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+            return ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition()
+                    == 0;
+        }
+        return false;
     }
 
-    private boolean isReachBottom(RecyclerView recyclerView) {
-        int lastItemBottom = recyclerView.getChildAt(recyclerView.getChildCount() - 1).getBottom();
-        int parentBottom = recyclerView.getBottom();
-        return lastItemBottom <= parentBottom;
+    private boolean isReachBottom(RecyclerView recyclerView, int newState) {
+        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+            return ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition()
+                    == recyclerView.getAdapter().getItemCount() - 1;
+        }
+        return false;
     }
 
     private void clipToolbarOffset() {
@@ -91,7 +95,7 @@ public class RvToolbarOffsetHidingScrollListener extends RecyclerView.OnScrollLi
                     if ((mToolbarHeight - mToolbarOffset) > SHOW_THRESHOLD) {
                         setVisible();
                     } else {
-                        if (isReachTop(recyclerView) || isReachBottom(recyclerView)) {
+                        if (isReachTop(recyclerView, newState) || isReachBottom(recyclerView, newState)) {
                             setVisible();
                         } else setInvisible();
                     }
