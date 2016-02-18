@@ -19,7 +19,6 @@ public class RvFabOffsetHidingScrollListener extends RecyclerView.OnScrollListen
     private boolean mControlsVisible = true;
     private static final float HIDE_THRESHOLD = 10;
     private static final float SHOW_THRESHOLD = 70;
-    private int mScrollDistance;
 
     public RvFabOffsetHidingScrollListener(Context context, @NonNull ImageButton fab) {
         mFabHeight = Utils.getTabsHeight(context);
@@ -36,10 +35,9 @@ public class RvFabOffsetHidingScrollListener extends RecyclerView.OnScrollListen
         if ((mFabOffset < mFabHeight && dy > 0) || (mFabOffset > 0 && dy < 0)) {
             mFabOffset += dy;
         }
-        mScrollDistance += dy;
     }
 
-    private boolean isReachTop(RecyclerView recyclerView, int newState) {
+    public boolean isReachTop(RecyclerView recyclerView, int newState) {
         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
             return ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition()
                     == 0;
@@ -47,7 +45,7 @@ public class RvFabOffsetHidingScrollListener extends RecyclerView.OnScrollListen
         return false;
     }
 
-    private boolean isReachBottom(RecyclerView recyclerView, int newState) {
+    public boolean isReachBottom(RecyclerView recyclerView, int newState) {
         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
             return ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition()
                     == recyclerView.getAdapter().getItemCount() - 1;

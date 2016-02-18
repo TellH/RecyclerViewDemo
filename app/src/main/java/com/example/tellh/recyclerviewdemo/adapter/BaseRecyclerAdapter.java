@@ -162,11 +162,11 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
     }
 
     //重写该方法进行header视图的数据绑定
-    public void bindHeader(RecyclerViewHolder holder, int position) {
+    protected void bindHeader(RecyclerViewHolder holder, int position) {
     }
 
     //重写该方法进行footer视图的数据绑定
-    public void bindFooter(RecyclerViewHolder holder, int position) {
+    protected void bindFooter(RecyclerViewHolder holder, int position) {
     }
 
     /**
