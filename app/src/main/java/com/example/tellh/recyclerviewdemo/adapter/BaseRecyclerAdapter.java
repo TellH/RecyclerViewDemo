@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,21 +19,25 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_HEADER = -1;
     private static final int TYPE_FOOTER = 1;
-    protected final List<T> mData;
+    protected final List<T> mItems;
     protected final Context mContext;
     protected LayoutInflater mInflater;
     private OnItemClickListener mClickListener;
     private OnItemLongClickListener mLongClickListener;
 
     public BaseRecyclerAdapter(Context ctx, List<T> list) {
-        mData = (list != null) ? list : new ArrayList<T>();
+        mItems = (list != null) ? list : new ArrayList<T>();
         mContext = ctx;
         mInflater = LayoutInflater.from(ctx);
+
+        if (isHeaderExist()) mItems.add(0, null);
+        if (isFooterExist()) mItems.add(mItems.size(), null);
     }
 
 
     /**
-     * 如果你要用在GridLayout中使用header或footer，记得调用该函数
+     * 如果你要用在GridLayout中使用header或footer，记得在setLayoutManager之后调用该方法
+     *
      * @param manager
      */
     public void getGridLayoutManager(@NonNull final GridLayoutManager manager) {
@@ -47,6 +52,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
 
     /**
      * 如果需要在子类重写该方法，建议参照此形式
+     *
      * @param position
      * @return
      */
@@ -115,7 +121,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
         return -1;
     }
 
-    public boolean isFooterExist() {
+    final public boolean isFooterExist() {
         return getFooterLayoutId() != -1;
     }
 
@@ -123,57 +129,82 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
         return -1;
     }
 
-    public boolean isHeaderExist() {
+    final public boolean isHeaderExist() {
         return getHeaderLayoutId() != -1;
     }
 
-    public int getHeaderPosition() {
+    final public int getHeaderPosition() {
         if (isHeaderExist()) return 0;
         return -1;
     }
 
-    public int getFooterPosition() {
+    final public int getFooterPosition() {
         if (isFooterExist()) return getItemCount() - 1;
         return -1;
     }
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-        if (position == getFooterPosition()) {bindFooter(holder, position);return;}
-        if (!isHeaderExist())
-            bindData(holder, position, mData.get(position));
-        else {
-            if (position == getHeaderPosition()) bindHeader(holder, position);
-            else bindData(holder, position , mData.get(position - 1));
-        }
+        if (position == getFooterPosition()) bindFooter(holder, position);
+        else if (position == getHeaderPosition()) bindHeader(holder, position);
+        else bindData(holder, position, mItems.get(position));
     }
 
 
     @Override
-    public int getItemCount() {
-        int count = mData.size();
-        if (isHeaderExist()) count++;
-        if (isFooterExist()) count++;
-        return count;
+    final public int getItemCount() {
+        return mItems.size();
     }
 
-    //添加数据到特定的位置，该位置不考虑header和footer
+    //添加数据到特定的位置，该位置已考虑header和footer
     public void add(int pos, T item) {
-        mData.add(pos, item);
-        notifyItemInserted(pos);
+        if (pos != getHeaderPosition() && pos != getFooterPosition() + 1) {
+            mItems.add(pos, item);
+            notifyItemInserted(pos);
+        } else {
+            try {
+                throw new Exception("your position to add or delete should consider the header and footer.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    //在特定位置删除数据，该位置不考虑header和footer
+    //在特定位置删除数据，该位置已考虑header和footer
     public void delete(int pos) {
-        mData.remove(pos);
-        notifyItemRemoved(pos);
+        if (pos != getHeaderPosition() && pos != getFooterPosition()) {
+            mItems.remove(pos);
+            notifyItemRemoved(pos);
+        } else {
+            try {
+                throw new Exception("your position to add or delete should consider the header and footer.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    //在特定的位置之间交换位置，该位置已考虑header和footer
+    public void swap(int fromPosition, int toPosition) {
+        int head = getHeaderPosition();
+        int foot = getFooterPosition();
+        if (fromPosition != head && toPosition != head && fromPosition != foot && toPosition != foot) {
+            Collections.swap(mItems, fromPosition, toPosition);
+            notifyItemMoved(fromPosition, toPosition);
+        } else {
+            try {
+                throw new Exception("your position to swap should consider the header and footer.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    final public void setOnItemClickListener(OnItemClickListener listener) {
         mClickListener = listener;
     }
 
-    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+    final public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         mLongClickListener = listener;
     }
 
@@ -187,13 +218,15 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
 
     /**
      * 重写该方法，根据viewType设置item的layout
+     *
      * @param viewType 通过重写getItemViewType（）设置，默认item是0
      * @return
      */
     abstract protected int getItemLayoutId(int viewType);
 
     /**
-     *重写该方法进行item视图的数据绑定
+     * 重写该方法进行item数据项视图的数据绑定
+     *
      * @param holder   通过holder获得item中的子View，进行数据绑定
      * @param position 该item的position
      * @param item     映射到该item的数据
