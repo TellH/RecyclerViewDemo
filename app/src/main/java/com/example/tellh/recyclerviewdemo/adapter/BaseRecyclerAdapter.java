@@ -140,7 +140,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
 
     final public int getFooterPosition() {
         if (isFooterExist()) return getItemCount() - 1;
-        return -1;
+        return -2;
     }
 
     @Override

@@ -20,4 +20,10 @@
         android:layout_marginRight="16dp"
         android:src="@drawable/ic_favorite_outline_white_24dp"
         android:contentDescription="@null"/>
+    <ViewStub
+        android:id="@+id/emptyView"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/empty_view"/>
 </FrameLayout>
