@@ -2,10 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/colorAccent"
-    >
+    android:background="@color/colorAccent">
     <TextView
         android:id="@+id/tv_header"
+        android:text="My Header"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>
