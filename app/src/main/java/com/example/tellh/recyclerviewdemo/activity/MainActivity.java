@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.tellh.recyclerviewdemo.DividerGridItemDecoration;
 import com.example.tellh.recyclerviewdemo.R;
 import com.example.tellh.recyclerviewdemo.adapter.RecycAdapter;
+import com.example.tellh.recyclerviewdemo.listener.RvShutterScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,6 +117,5 @@ public class MainActivity extends AppCompatActivity {
         //设置布局样式LayoutManager
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false));
 //        recyclerView.addItemDecoration(new ItemDividerDecoration(MainActivity.this, OrientationHelper.VERTICAL));
-
     }
 }
