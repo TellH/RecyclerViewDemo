@@ -67,6 +67,7 @@ public class RvShutterScrollListener extends RecyclerView.OnScrollListener {
         for (int i=firstVisibleItemPosition;i<=lastVisibleItemPosition;i++){
             RecyclerViewHolder viewHolder = (RecyclerViewHolder) recyclerView.findViewHolderForLayoutPosition(i);
             View itemView = viewHolder.getItemView();
+            itemView.clearAnimation();
             itemView.startAnimation(animation);
         }
         isAnimStart=false;
@@ -83,6 +84,7 @@ public class RvShutterScrollListener extends RecyclerView.OnScrollListener {
         for (int i=firstVisibleItemPosition;i<=lastVisibleItemPosition;i++){
             RecyclerViewHolder viewHolder = (RecyclerViewHolder) recyclerView.findViewHolderForLayoutPosition(i);
             View itemView = viewHolder.getItemView();
+            itemView.clearAnimation();
             itemView.startAnimation(animation);
         }
     }
