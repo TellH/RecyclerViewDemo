@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu
+	xmlns:android="http://schemas.android.com/apk/res/android" >
+
+	<item
+		android:id="@+id/popup_rename"
+		android:icon="@drawable/icon_rename"
+		android:title="rename" />
+
+	<item
+		android:id="@+id/popup_lock"
+		android:icon="@drawable/icon_lock"
+		android:title="lock" />
+
+	<item
+		android:id="@+id/popup_unlock"
+		android:icon="@drawable/icon_unlock"
+		android:title="unlock" />
+
+	<item
+		android:id="@+id/popup_delete"
+		android:icon="@drawable/icon_delete"
+		android:title="delete" />
+
+	<item
+		android:id="@+id/popup_set_cover"
+		android:icon="@drawable/icon_set_over"
+		android:title="set_cover" />
+
+</menu>
