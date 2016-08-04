@@ -72,7 +72,6 @@ public class RvEmptyViewActivity extends AppCompatActivity implements ItemTouchA
             case R.id.id_action_gridview:
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
                 recyclerView.setLayoutManager(gridLayoutManager);
-                mAdapter.getGridLayoutManager(gridLayoutManager);
                 break;
             case R.id.id_action_listview:
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -129,7 +128,7 @@ public class RvEmptyViewActivity extends AppCompatActivity implements ItemTouchA
         recyclerView.addOnScrollListener(new RvToolbarOffsetHidingScrollListener(this, mToolbar));
         recyclerView.addOnScrollListener(new RvFabOffsetHidingScrollListener(this, fab));
 
-        mItemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback((ItemTouchAdapter) mAdapter));
+        mItemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback((ItemTouchHelperCallback.ItemTouchListener) mAdapter));
         mItemTouchHelper.attachToRecyclerView(recyclerView);
 
         setEmptyView();

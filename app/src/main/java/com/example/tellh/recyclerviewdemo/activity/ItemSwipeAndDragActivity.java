@@ -21,6 +21,7 @@ import com.example.tellh.recyclerviewdemo.ItemTouchHelperCallback;
 import com.example.tellh.recyclerviewdemo.R;
 import com.example.tellh.recyclerviewdemo.adapter.BaseRecyclerAdapter;
 import com.example.tellh.recyclerviewdemo.adapter.ItemTouchAdapter;
+import com.example.tellh.recyclerviewdemo.adapter.ItemTouchAdapterWrapper;
 import com.example.tellh.recyclerviewdemo.listener.RvFabOffsetHidingScrollListener;
 import com.example.tellh.recyclerviewdemo.listener.RvToolbarOffsetHidingScrollListener;
 
@@ -35,7 +36,7 @@ public class ItemSwipeAndDragActivity extends AppCompatActivity implements ItemT
     private Toolbar mToolbar;
     private FloatingActionButton fab;
     private ItemTouchHelper mItemTouchHelper;
-
+    private ItemTouchAdapterWrapper wrapper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +71,7 @@ public class ItemSwipeAndDragActivity extends AppCompatActivity implements ItemT
             case R.id.id_action_gridview:
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
                 recyclerView.setLayoutManager(gridLayoutManager);
-                mAdapter.getGridLayoutManager(gridLayoutManager);
+                wrapper.onAttachedToRecyclerView(recyclerView);
                 break;
             case R.id.id_action_listview:
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -82,10 +83,10 @@ public class ItemSwipeAndDragActivity extends AppCompatActivity implements ItemT
                 startActivity(new Intent(this,StaggeredActivity.class));
                 break;
             case R.id.id_action_add:
-                ((BaseRecyclerAdapter)mAdapter).add(2, "new item");
+                wrapper.add(2, "new item");
                 break;
             case R.id.id_action_delete:
-                ((BaseRecyclerAdapter)mAdapter).delete(2);
+                wrapper.delete(2);
                 break;
             default:
                 break;
@@ -104,26 +105,18 @@ public class ItemSwipeAndDragActivity extends AppCompatActivity implements ItemT
         }
         //设置item动画
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new ItemTouchAdapter(this,mDataList) {
-            //设置Header
-            @Override
-            protected int getHeaderLayoutId() {return R.layout.header;}
-
-            @Override
-            protected int getFooterLayoutId() {
-                return R.layout.footer_load_more;
-            }
-        };
-
-        recyclerView.setAdapter(mAdapter);
+        mAdapter = new ItemTouchAdapter(this,mDataList);
+        wrapper=new ItemTouchAdapterWrapper((ItemTouchAdapter) mAdapter);
+        wrapper.addFooter(R.layout.footer_load_more);
+        wrapper.addHeader(R.layout.header);
         //添加item点击事件监听
-        ((BaseRecyclerAdapter)mAdapter).setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int pos) {
                 Toast.makeText(ItemSwipeAndDragActivity.this, "click " + pos, Toast.LENGTH_SHORT).show();
             }
         });
-        ((BaseRecyclerAdapter)mAdapter).setOnItemLongClickListener(new BaseRecyclerAdapter.OnItemLongClickListener() {
+        mAdapter.setOnItemLongClickListener(new BaseRecyclerAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, int pos) {
                 Toast.makeText(ItemSwipeAndDragActivity.this, "long click " + pos, Toast.LENGTH_SHORT).show();
@@ -131,11 +124,11 @@ public class ItemSwipeAndDragActivity extends AppCompatActivity implements ItemT
         });
         //设置布局样式LayoutManager
         recyclerView.setLayoutManager(new LinearLayoutManager(ItemSwipeAndDragActivity.this, LinearLayoutManager.VERTICAL, false));
-
+        recyclerView.setAdapter(wrapper);
         recyclerView.addOnScrollListener(new RvToolbarOffsetHidingScrollListener(this, mToolbar));
         recyclerView.addOnScrollListener(new RvFabOffsetHidingScrollListener(this,fab));
 
-        mItemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback((ItemTouchAdapter) mAdapter));
+        mItemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(wrapper));
         mItemTouchHelper.attachToRecyclerView(recyclerView);
     }
 

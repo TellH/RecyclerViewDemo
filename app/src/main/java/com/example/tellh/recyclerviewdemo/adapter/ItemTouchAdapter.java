@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.tellh.recyclerviewdemo.ItemTouchHelperCallback;
 import com.example.tellh.recyclerviewdemo.R;
 
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
 /**
  * Created by tlh on 2016/2/19.
  */
-public class ItemTouchAdapter extends BaseRecyclerAdapter<String> implements ItemTouchHelperCallback.ItemTouchListener {
+public class ItemTouchAdapter extends BaseRecyclerAdapter<String>{
     public ItemTouchAdapter(Context ctx, List<String> list) {
         super(ctx, list);
     }
@@ -36,16 +35,6 @@ public class ItemTouchAdapter extends BaseRecyclerAdapter<String> implements Ite
                 return false;
             }
         });
-    }
-
-    @Override
-    public void OnItemMove(int fromPosition, int toPosition) {
-        swap(fromPosition, toPosition);
-    }
-
-    @Override
-    public void OnItemDismiss(int position) {
-        delete(position);
     }
 
     public interface OnStartActionListener {

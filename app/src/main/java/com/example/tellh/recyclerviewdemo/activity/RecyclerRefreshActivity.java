@@ -20,8 +20,8 @@ import android.widget.Toast;
 
 import com.example.tellh.recyclerviewdemo.R;
 import com.example.tellh.recyclerviewdemo.adapter.BaseRecyclerAdapter;
-import com.example.tellh.recyclerviewdemo.adapter.FooterLoadMoreAdapter;
-import com.example.tellh.recyclerviewdemo.listener.RvFabOffsetHidingScrollListener;
+import com.example.tellh.recyclerviewdemo.adapter.FooterLoadMoreAdapterWrapper;
+import com.example.tellh.recyclerviewdemo.adapter.RecyclerViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,6 @@ public class RecyclerRefreshActivity extends AppCompatActivity {
             case R.id.id_action_gridview:
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
                 recyclerView.setLayoutManager(gridLayoutManager);
-                mAdapter.getGridLayoutManager(gridLayoutManager);
                 break;
             case R.id.id_action_listview:
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -104,43 +103,17 @@ public class RecyclerRefreshActivity extends AppCompatActivity {
         }
         //设置item动画
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new FooterLoadMoreAdapter(this, mDataList);
-
-        recyclerView.setAdapter(mAdapter);
-        //添加item点击事件监听
-        ((BaseRecyclerAdapter) mAdapter).setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+        mAdapter = new BaseRecyclerAdapter<String>(this, mDataList) {
             @Override
-            public void onItemClick(View itemView, int pos) {
-                Toast.makeText(RecyclerRefreshActivity.this, "click " + pos, Toast.LENGTH_SHORT).show();
+            protected int getItemLayoutId(int viewType) {
+                return R.layout.item_cardview;
             }
-        });
-        ((BaseRecyclerAdapter) mAdapter).setOnItemLongClickListener(new BaseRecyclerAdapter.OnItemLongClickListener() {
-            @Override
-            public void onItemLongClick(View itemView, int pos) {
-                Toast.makeText(RecyclerRefreshActivity.this, "long click " + pos, Toast.LENGTH_SHORT).show();
-            }
-        });
-        //设置布局样式LayoutManager
-        recyclerView.setLayoutManager(new LinearLayoutManager(RecyclerRefreshActivity.this, LinearLayoutManager.VERTICAL, false));
 
-        recyclerView.addOnScrollListener(new RvFabOffsetHidingScrollListener(this, fab) {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (isReachBottom(recyclerView, newState)) {
-                    ((FooterLoadMoreAdapter)mAdapter).setFooterStatus(FooterLoadMoreAdapter.LOADING);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.add(mAdapter.getItemCount()-1,"new");
-                            ((FooterLoadMoreAdapter)mAdapter).setFooterStatus(FooterLoadMoreAdapter.PULL_TO_LOAD_MORE);
-//                            ((FooterLoadMoreAdapter)mAdapter).setFooterStatus(FooterLoadMoreAdapter.NO_MORE);
-                        }
-                    }, 5000);
-                }
+            protected void bindData(RecyclerViewHolder holder, int position, String item) {
+                holder.setText(R.id.tv_num, item);
             }
-        });
-
+        };
         mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -156,6 +129,37 @@ public class RecyclerRefreshActivity extends AppCompatActivity {
             }
         });
 
+        //添加item点击事件监听
+        ((BaseRecyclerAdapter) mAdapter).setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int pos) {
+                Toast.makeText(RecyclerRefreshActivity.this, "click " + pos, Toast.LENGTH_SHORT).show();
+            }
+        });
+        ((BaseRecyclerAdapter) mAdapter).setOnItemLongClickListener(new BaseRecyclerAdapter.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(View itemView, int pos) {
+                Toast.makeText(RecyclerRefreshActivity.this, "long click " + pos, Toast.LENGTH_SHORT).show();
+            }
+        });
+        //设置布局样式LayoutManager
+        recyclerView.setLayoutManager(new LinearLayoutManager(RecyclerRefreshActivity.this, LinearLayoutManager.VERTICAL, false));
+        final FooterLoadMoreAdapterWrapper wrapper = new FooterLoadMoreAdapterWrapper(mAdapter);
+        wrapper.setOnReachFootreListener(recyclerView, new FooterLoadMoreAdapterWrapper.OnReachFooterListener() {
+            @Override
+            public void onReach() {
+                wrapper.setFooterStatus(FooterLoadMoreAdapterWrapper.LOADING);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.add(wrapper.getItemCount() - 1, "new");
+                        wrapper.setFooterStatus(FooterLoadMoreAdapterWrapper.PULL_TO_LOAD_MORE);
+//                        wrapper.setFooterStatus(FooterLoadMoreAdapterWrapper.NO_MORE);
+                    }
+                }, 5000);
+            }
+        });
+        recyclerView.setAdapter(wrapper);
     }
 
 }

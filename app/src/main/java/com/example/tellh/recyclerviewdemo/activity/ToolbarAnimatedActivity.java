@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.tellh.recyclerviewdemo.R;
 import com.example.tellh.recyclerviewdemo.adapter.BaseRecyclerAdapter;
+import com.example.tellh.recyclerviewdemo.adapter.HeaderAndFooterAdapterWrapper;
 import com.example.tellh.recyclerviewdemo.adapter.RecyclerViewHolder;
 import com.example.tellh.recyclerviewdemo.listener.RvFabOffsetHidingScrollListener;
 import com.example.tellh.recyclerviewdemo.listener.RvToolbarOffsetHidingScrollListener;
@@ -106,16 +107,12 @@ public class ToolbarAnimatedActivity extends AppCompatActivity {
             }
             @Override
             public void bindData(RecyclerViewHolder holder, int position,String item) {
-                //调用holder.getView(),getXXX()方法根据id得到控件实例，进行数据绑定即可
                 holder.setText(R.id.tv_num,item);
             }
-            //设置Header
-            @Override
-            protected int getHeaderLayoutId() {return R.layout.header;}
-
         };
-
-        recyclerView.setAdapter(mAdapter);
+        HeaderAndFooterAdapterWrapper wrapper=new HeaderAndFooterAdapterWrapper((BaseRecyclerAdapter) mAdapter);
+        wrapper.addHeader(R.layout.header);
+        recyclerView.setAdapter(wrapper);
         //添加item点击事件监听
         ((BaseRecyclerAdapter)mAdapter).setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
