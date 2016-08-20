@@ -36,23 +36,23 @@ public class RecycAdapter<T> extends RecyclerView.Adapter<RecycAdapter.MyViewHol
         Log.d("TAG", "onCreateViewHolder() called with: " + "parent = [" + parent + "], viewType = [" + viewType + "]"+",times="+"["+(++times)+"]");
         final MyViewHolder holder=new MyViewHolder(mInflater.inflate(R.layout.item,parent,false));
 
-        //设置点击事件监听
-        if (mListener!=null){
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.onItemClick(v,holder.getLayoutPosition());
-                }
-            });
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    mLongClickListener.onItemLongClick(v,holder.getLayoutPosition());
-                    //返回true，拦截点击事件继续往下传递，不触发单击事件的响应
-                    return true;
-                }
-            });
-        }
+//        //设置点击事件监听
+//        if (mListener!=null){
+//            holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    mListener.onItemClick(v,holder.getLayoutPosition());
+//                }
+//            });
+//            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View v) {
+//                    mLongClickListener.onItemLongClick(v,holder.getLayoutPosition());
+//                    //返回true，拦截点击事件继续往下传递，不触发单击事件的响应
+//                    return true;
+//                }
+//            });
+//        }
         return holder;
     }
 

@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 import com.example.tellh.recyclerviewdemo.DividerGridItemDecoration;
 import com.example.tellh.recyclerviewdemo.R;
+import com.example.tellh.recyclerviewdemo.adapter.MultiSelectItemAdapterWrapper;
 import com.example.tellh.recyclerviewdemo.adapter.RecycAdapter;
-import com.example.tellh.recyclerviewdemo.listener.RvShutterScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     List<String> mDataList;
     private RecyclerView recyclerView;
     private RecycAdapter mAdapter;
-
+    private MultiSelectItemAdapterWrapper adapterWrapper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
 
     }
 
@@ -67,16 +66,16 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.id_action_gridview:
                 recyclerView.addItemDecoration(new DividerGridItemDecoration(this));
-                recyclerView.setLayoutManager(new GridLayoutManager(this,3));
+                recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
                 break;
             case R.id.id_action_listview:
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 break;
             case R.id.id_action_horizontalGridView:
-                recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.HORIZONTAL));
+                recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.HORIZONTAL));
                 break;
             case R.id.id_action_staggeredgridview:
-                startActivity(new Intent(this,StaggeredActivity.class));
+                startActivity(new Intent(this, StaggeredActivity.class));
                 break;
             case R.id.id_action_add:
                 mAdapter.add(2, "new item");
@@ -93,14 +92,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+
         mDataList = new ArrayList<>();
         for (int i = 0; i <= 100; i++) {
             mDataList.add(String.valueOf(i));
         }
         //设置item动画
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new RecycAdapter<String>(MainActivity.this, mDataList);
-        recyclerView.setAdapter(mAdapter);
+        mAdapter = new RecycAdapter<>(MainActivity.this, mDataList);
+        adapterWrapper = new MultiSelectItemAdapterWrapper(mAdapter);
+        recyclerView.setAdapter(adapterWrapper);
         //添加item点击事件监听
         mAdapter.setOnItemClickListener(new RecycAdapter.OnItemClickListener() {
             @Override
@@ -117,5 +118,14 @@ public class MainActivity extends AppCompatActivity {
         //设置布局样式LayoutManager
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false));
 //        recyclerView.addItemDecoration(new ItemDividerDecoration(MainActivity.this, OrientationHelper.VERTICAL));
+    }
+
+    @Override
+    public void onBackPressed() {
+//        if (adapterWrapper.getSelectedItemCount()!=0){
+//            adapterWrapper.clearSelections();
+//            return;
+//        }
+        super.onBackPressed();
     }
 }

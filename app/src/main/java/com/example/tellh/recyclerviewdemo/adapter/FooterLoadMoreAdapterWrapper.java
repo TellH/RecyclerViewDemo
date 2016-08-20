@@ -15,6 +15,10 @@ public class FooterLoadMoreAdapterWrapper extends HeaderAndFooterAdapterWrapper 
     public static final int LOADING = 1;
     public static final int NO_MORE = 2;
     private int mFooterStatus = PULL_TO_LOAD_MORE;
+    private String toLoadText = "上拉加载更多...";
+    private String noMoreText = "没有更多了！";
+    private String loadingText = "正在拼命加载...";
+
     public FooterLoadMoreAdapterWrapper(BaseRecyclerAdapter adapter) {
         super(adapter);
     }
@@ -25,20 +29,20 @@ public class FooterLoadMoreAdapterWrapper extends HeaderAndFooterAdapterWrapper 
         switch (mFooterStatus) {
             case PULL_TO_LOAD_MORE:
                 progressBar.setVisibility(View.VISIBLE);
-                holder.setText(R.id.tv_footer, "上拉加载更多...");
+                holder.setText(R.id.tv_footer, toLoadText);
                 break;
             case LOADING:
                 progressBar.setVisibility(View.VISIBLE);
-                holder.setText(R.id.tv_footer, "正在拼命加载...");
+                holder.setText(R.id.tv_footer, loadingText);
                 break;
             case NO_MORE:
-                holder.setText(R.id.tv_footer, "没有更多了！");
+                holder.setText(R.id.tv_footer, noMoreText);
                 progressBar.setVisibility(View.INVISIBLE);
                 break;
         }
     }
 
-    public void setOnReachFootreListener(RecyclerView recyclerView, final OnReachFooterListener listener) {
+    public void setOnReachFooterListener(RecyclerView recyclerView, final OnReachFooterListener listener) {
         if (recyclerView == null || listener == null)
             return;
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -57,6 +61,7 @@ public class FooterLoadMoreAdapterWrapper extends HeaderAndFooterAdapterWrapper 
         mFooterStatus = status;
         notifyDataSetChanged();
     }
+
     public boolean isReachBottom(RecyclerView recyclerView, int newState) {
         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
             return ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition()
@@ -67,5 +72,18 @@ public class FooterLoadMoreAdapterWrapper extends HeaderAndFooterAdapterWrapper 
 
     public interface OnReachFooterListener {
         void onReach();
+    }
+
+
+    public void setToLoadText(String toLoadText) {
+        this.toLoadText = toLoadText;
+    }
+
+    public void setNoMoreText(String noMoreText) {
+        this.noMoreText = noMoreText;
+    }
+
+    public void setLoadingText(String loadingText) {
+        this.loadingText = loadingText;
     }
 }

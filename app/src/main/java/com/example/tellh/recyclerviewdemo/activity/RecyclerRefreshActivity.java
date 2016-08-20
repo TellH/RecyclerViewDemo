@@ -145,7 +145,7 @@ public class RecyclerRefreshActivity extends AppCompatActivity {
         //设置布局样式LayoutManager
         recyclerView.setLayoutManager(new LinearLayoutManager(RecyclerRefreshActivity.this, LinearLayoutManager.VERTICAL, false));
         final FooterLoadMoreAdapterWrapper wrapper = new FooterLoadMoreAdapterWrapper(mAdapter);
-        wrapper.setOnReachFootreListener(recyclerView, new FooterLoadMoreAdapterWrapper.OnReachFooterListener() {
+        wrapper.setOnReachFooterListener(recyclerView, new FooterLoadMoreAdapterWrapper.OnReachFooterListener() {
             @Override
             public void onReach() {
                 wrapper.setFooterStatus(FooterLoadMoreAdapterWrapper.LOADING);
