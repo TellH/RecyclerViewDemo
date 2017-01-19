@@ -96,13 +96,13 @@ public class HeaderAndFooterAdapterWrapper extends BaseRecyclerAdapter {
         Context context = parent.getContext();
         View view = getHeaderView(viewType, context, parent);
         if (view != null) {
-            return new RecyclerViewHolder(context, view);
+            return new RecyclerViewHolder(view);
         }
         view = getFooterView(viewType, context, parent);
         if (view != null) {
-            return new RecyclerViewHolder(context, view);
+            return new RecyclerViewHolder(view);
         }
-        return (RecyclerViewHolder) mAdapter.onCreateViewHolder(parent, viewType);
+        return mAdapter.onCreateViewHolder(parent, viewType);
     }
 
     @Override

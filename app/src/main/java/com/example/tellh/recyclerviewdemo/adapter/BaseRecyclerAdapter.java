@@ -28,8 +28,8 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final RecyclerViewHolder holder = new RecyclerViewHolder(mContext,
-                mInflater.inflate(getItemLayoutId(viewType), parent, false));
+        final RecyclerViewHolder holder = new RecyclerViewHolder
+                (mInflater.inflate(getItemLayoutId(viewType), parent, false));
         if (mClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

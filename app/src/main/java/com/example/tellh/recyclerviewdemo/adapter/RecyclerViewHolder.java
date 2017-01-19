@@ -1,6 +1,5 @@
 package com.example.tellh.recyclerviewdemo.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
@@ -14,18 +13,17 @@ import android.widget.TextView;
  * Created by tlh on 2016/2/15.
  */
 public class RecyclerViewHolder extends RecyclerView.ViewHolder {
-    private SparseArray<View> mViews;//集合类，layout里包含的View,以view的id作为key，value是view对象
-    private Context mContext;//上下文对象
+    private SparseArray<View> mViews;
 
-    public RecyclerViewHolder(Context ctx, View itemView) {
+    public RecyclerViewHolder(View itemView) {
         super(itemView);
-        mContext = ctx;
-        mViews = new SparseArray<View>();
+        mViews = new SparseArray<>();
     }
 
-    public View getItemView(){
+    public View getItemView() {
         return itemView;
     }
+
     private <T extends View> T findViewById(int viewId) {
         View view = mViews.get(viewId);
         if (view == null) {
