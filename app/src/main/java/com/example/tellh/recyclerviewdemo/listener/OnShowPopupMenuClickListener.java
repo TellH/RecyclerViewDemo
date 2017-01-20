@@ -43,7 +43,6 @@ public class OnShowPopupMenuClickListener implements View.OnClickListener {
     public void onClick(View v) {
         // This is an android.support.v7.widget.PopupMenu;
         PopupMenu popupMenu = new PopupMenu(mContext, v) {
-            @Override
             public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.popup_delete:
@@ -72,8 +71,9 @@ public class OnShowPopupMenuClickListener implements View.OnClickListener {
                         return true;
 
                     default:
-                        return super.onMenuItemSelected(menu, item);
+//                        return super.onMenuItemSelected(menu, item);
                 }
+                return false;
             }
         };
 

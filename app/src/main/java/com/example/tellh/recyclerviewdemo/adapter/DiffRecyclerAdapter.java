@@ -58,6 +58,10 @@ public abstract class DiffRecyclerAdapter<T extends DiffRecyclerAdapter.Differen
         }
     }
 
+    public List<T> getDisplayList() {
+        return displayList;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
@@ -90,17 +94,26 @@ public abstract class DiffRecyclerAdapter<T extends DiffRecyclerAdapter.Differen
         return displayList.size();
     }
 
-    private void notifyDiff() {
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+    public void notifyDiff() {
+        notifyDiff(false);
+    }
+
+    public void notifyDiff(boolean detectMoves) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback, detectMoves);
         diffResult.dispatchUpdatesTo(this);
     }
 
-    private void backupDisplayList() {
+    public DiffUtil.DiffResult calculateDiff(boolean detectMoves) {
+        return DiffUtil.calculateDiff(diffCallback, detectMoves);
+    }
+
+    public void backupDisplayList() {
         backupDisplayList(false);
     }
 
-    private void backupDisplayList(boolean checkDiffContent) {
+    public void backupDisplayList(boolean checkDiffContent) {
         if (!checkDiffContent) {
+            backupList.clear();
             backupList.addAll(displayList);
             return;
         }
