@@ -51,6 +51,10 @@ public abstract class DiffRecyclerAdapter<T extends DiffRecyclerAdapter.Differen
         }
     };
 
+    public DiffRecyclerAdapter() {
+        this(null);
+    }
+
     public DiffRecyclerAdapter(List<T> displayList) {
         this.displayList = displayList == null ? new ArrayList<T>() : displayList;
         if (displayList != null) {

@@ -53,7 +53,7 @@ public class DiffUtilActivity extends AppCompatActivity {
         setContentView(R.layout.activity_diff_util);
         rv = (RecyclerView) findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new DiffRecyclerAdapter<AppInfo>(null) {
+        adapter = new DiffRecyclerAdapter<AppInfo>() {
             @Override
             protected RecyclerView.ViewHolder newViewHolderInstance(View v) {
                 return new AppInfoViewHolder(v);
