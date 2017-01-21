@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_with_rxjava"
-        android:title="Calculate with RxJava"/>
+        android:title="Calculate with RxJava" />
     <item
         android:id="@+id/action_diff_normal"
         android:title="Insert Or Delete" />

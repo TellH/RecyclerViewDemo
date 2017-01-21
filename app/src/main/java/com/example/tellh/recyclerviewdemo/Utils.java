@@ -1,6 +1,8 @@
 package com.example.tellh.recyclerviewdemo;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +12,8 @@ import android.graphics.drawable.Drawable;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -52,6 +56,7 @@ public class Utils {
             }
         });
     }
+
     private static void blockingStoreBitmap(Context context, Bitmap bitmap, String filename) {
         FileOutputStream fOut = null;
         try {
@@ -71,6 +76,7 @@ public class Utils {
             }
         }
     }
+
     public static Observable<Bitmap> getBitmap(final String icon) {
         return Observable.create(new Observable.OnSubscribe<Bitmap>() {
             @Override
@@ -80,5 +86,38 @@ public class Utils {
             }
         });
     }
+
+    public static Observable<List<AppInfo>> getApps(final Context context) {
+        return Observable.create(new Observable.OnSubscribe<List<AppInfo>>() {
+            @Override
+            public void call(Subscriber<? super List<AppInfo>> subscriber) {
+                List<AppInfo.AppInfoRich> apps = new ArrayList<>();
+                final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+                List<ResolveInfo> infos = context.getPackageManager().queryIntentActivities(mainIntent, 0);
+                for (ResolveInfo info : infos) {
+                    apps.add(new AppInfo.AppInfoRich(context, info));
+                }
+                List<AppInfo> result = new ArrayList<>(apps.size());
+                for (AppInfo.AppInfoRich appInfo : apps) {
+                    Bitmap icon = Utils.drawableToBitmap(appInfo.getIcon());
+                    String name = appInfo.getName();
+                    String iconPath = AndroidApplication.getInstance().getApplicationContext().getFilesDir() + "/" + name;
+                    Utils.storeBitmap(AndroidApplication.getInstance(), icon, name);
+
+                    if (subscriber.isUnsubscribed()) {
+                        return;
+                    }
+                    result.add(new AppInfo(name, iconPath, appInfo.getLastUpdateTime()));
+                }
+                if (!subscriber.isUnsubscribed()) {
+                    subscriber.onNext(result);
+                    subscriber.onCompleted();
+                }
+            }
+        });
+    }
+
 
 }

@@ -13,13 +13,17 @@
             android:name=".activity.DiffUtilActivity"
             android:label="@string/app_name"
             android:theme="@style/DiffActivityTheme">
+
+        </activity>
+        <activity android:name=".activity.StaggeredActivity" />
+        <activity
+            android:name=".activity.StickyHeaderActivity"
+            android:theme="@style/StickyActivityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.StaggeredActivity" />
     </application>
 
 </manifest>

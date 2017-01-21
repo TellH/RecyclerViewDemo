@@ -5,11 +5,13 @@
     <color name="colorAccent">#FF4081</color>
     <color name="color_primary_red">#f44336</color>
     <color name="color_primary_red_dark">#d32f2f</color>
-    <color name="color_primary_green"> #4caf50</color>
+    <color name="color_primary_green">#4caf50</color>
     <color name="color_primary_green_dark">#388e3c</color>
     <color name="color_primary_blue">#2196f3</color>
     <color name="color_primary_blue_dark">#1976d2</color>
     <color name="color_accent_pink">#ff4081</color>
     <color name="color_shadow">#44000000</color>
     <color name="transparent">#00000000</color>
+    <color name="black">#44000000</color>
+    <color name="white">#ffffff</color>
 </resources>
